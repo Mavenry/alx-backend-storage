@@ -1,19 +1,16 @@
 #!/usr/bin/env python3
-"""
-Defines a function that returns the list of school having a specific topic
-"""
-from typing import List
-from pymongo import MongoClient
+'''Module.
+'''
 
 
-def schools_by_topic(mongo_collection: MongoClient,
-                     topic: str) -> List[object]:
-    """
-    Llist of school having a specific topic
-    Args:
-        mongo_collection: a collection object from a mongoDB database
-        topic (str): topic to be searched
-    Returns:
-        List of documents or an empty list
-    """
-    return mongo_collection.find({"topics": topic})
+def schools_by_topic(mongo_collection, topic):
+    '''Function that returns the list of school having a specific topic.
+    '''
+    topic_filter = {
+        'topics': {
+            '$elemMatch': {
+                '$eq': topic,
+            },
+        },
+    }
+    return [doc for doc in mongo_collection.find(topic_filter)]
